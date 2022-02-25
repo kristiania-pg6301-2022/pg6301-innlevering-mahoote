@@ -9,6 +9,8 @@ app.get("/api/question", (req, res) => {
   res.json(question);
 });
 
+app.post("/api/question", (req, res) => {});
+
 app.use(express.static("../client/dist"));
 app.use((req, res, next) => {
   if (req.method === "GET" && !req.path.startsWith("/api/")) {
