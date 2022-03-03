@@ -10,10 +10,15 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
+app.use((req, res, next) => {
+  const answers = req.signedCookies;
+  console.log(answers);
+  next();
+});
+
 app.get("/api/question", (req, res) => {
   const question = randomQuestion();
   res.json(question);
-  res.sendStatus(200);
 });
 
 app.post("/api/question", (req, res) => {
