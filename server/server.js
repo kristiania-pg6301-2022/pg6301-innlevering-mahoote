@@ -13,10 +13,6 @@ app.get("/api/question", (req, res) => {
 
 app.post("/api/question", (req, res) => {
   const { question, userAnswer } = req.body;
-
-  console.log(question);
-  console.log(userAnswer);
-
   const isCorrect = isCorrectAnswer(question, userAnswer);
   res.json({ answer: isCorrect });
 });

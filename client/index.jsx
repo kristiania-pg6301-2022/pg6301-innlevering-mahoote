@@ -28,6 +28,10 @@ function Question() {
       },
       body: JSON.stringify({ question, userAnswer }),
     });
+    // .then((response) => response.json())
+    // .then((status) => {
+    //   console.log(status.answer);
+    // });
   }
 
   return (
