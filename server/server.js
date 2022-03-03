@@ -1,15 +1,25 @@
 import express from "express";
-import { randomQuestion } from "./questions.js";
+import { isCorrectAnswer, randomQuestion } from "./questions.js";
 import * as path from "path";
+import bodyParser from "body-parser";
 
 const app = express();
+app.use(bodyParser.json());
 
 app.get("/api/question", (req, res) => {
   const question = randomQuestion();
   res.json(question);
 });
 
-app.post("/api/question", (req, res) => {});
+app.post("/api/question", (req, res) => {
+  const { question, userAnswer } = req.body;
+
+  console.log(question);
+  console.log(userAnswer);
+
+  const isCorrect = isCorrectAnswer(question, userAnswer);
+  res.json({ answer: isCorrect });
+});
 
 app.use(express.static("../client/dist"));
 app.use((req, res, next) => {

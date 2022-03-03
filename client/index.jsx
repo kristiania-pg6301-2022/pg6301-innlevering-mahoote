@@ -20,6 +20,16 @@ function Question() {
 
   if (!question) return <div>Loading...</div>;
 
+  function handleConfirm(question, userAnswer) {
+    fetch("/api/question", {
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ question, userAnswer }),
+    });
+  }
+
   return (
     <div>
       <h1>{question.question}</h1>
@@ -27,7 +37,7 @@ function Question() {
         .filter((a) => question.answers[a])
         .map((answer) => (
           <div key={answer}>
-            <button onClick={(q) => handleConfirm("sndldn")}>
+            <button onClick={(q) => handleConfirm(question, answer)}>
               {question.answers[answer]}
             </button>
           </div>
