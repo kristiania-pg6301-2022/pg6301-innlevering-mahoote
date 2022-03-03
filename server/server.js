@@ -21,7 +21,10 @@ app.get("/api/question", (req, res) => {
 
 app.get("/api/results", (req, res) => {
   const cookies = req.signedCookies;
-  res.json({ tot: cookies["totalAnswers"], cor: cookies["correctAnswers"] });
+  res.json({
+    tot: cookies["totalAnswers"],
+    cor: cookies["correctAnswers"],
+  });
 });
 
 app.post("/api/question", (req, res) => {

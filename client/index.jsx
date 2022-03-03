@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM, { render } from "react-dom";
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Link,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 
 function FrontPage() {
   return (
@@ -13,7 +19,7 @@ function FrontPage() {
 
 function Question() {
   const [question, setQuestion] = useState();
-
+  const navigate = useNavigate();
   useEffect(async () => {
     const res = await fetch("/api/question");
     setQuestion(await res.json());
@@ -34,6 +40,8 @@ function Question() {
     });
   }
 
+  function handleSubmit() {}
+
   return (
     <div>
       <h1>{question.question}</h1>
@@ -46,9 +54,22 @@ function Question() {
             </button>
           </div>
         ))}
-      <button>Submit Questionnaire</button>
+      <button onClick={(q) => navigate("/results")}>
+        Submit Questionnaire
+      </button>
     </div>
   );
+}
+
+function Results() {
+  const [cookies, setCookies] = useState();
+
+  useEffect(async () => {
+    const res = await fetch("/api/results");
+    setCookies(await res.json());
+  }, []);
+
+  return <div>{cookies}</div>;
 }
 
 function Application() {
@@ -57,6 +78,7 @@ function Application() {
       <Routes>
         <Route path={"/"} element={<FrontPage />} />
         <Route path={"/question"} element={<Question />} />
+        <Route path={"/results"} element={<Results />} />
       </Routes>
     </BrowserRouter>
   );
