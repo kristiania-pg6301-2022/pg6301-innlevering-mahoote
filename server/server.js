@@ -2,9 +2,13 @@ import express from "express";
 import { isCorrectAnswer, randomQuestion } from "./questions.js";
 import * as path from "path";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.get("/api/question", (req, res) => {
   const question = randomQuestion();
@@ -14,7 +18,8 @@ app.get("/api/question", (req, res) => {
 app.post("/api/question", (req, res) => {
   const { question, userAnswer } = req.body;
   const isCorrect = isCorrectAnswer(question, userAnswer);
-  res.json({ answer: isCorrect });
+  res.cookie("isCorrect", isCorrect, { signed: true });
+  res.sendStatus(200);
 });
 
 app.use(express.static("../client/dist"));
