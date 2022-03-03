@@ -13,12 +13,13 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.get("/api/question", (req, res) => {
   const question = randomQuestion();
   res.json(question);
+  res.sendStatus(200);
 });
 
 app.post("/api/question", (req, res) => {
   const { question, userAnswer } = req.body;
   const isCorrect = isCorrectAnswer(question, userAnswer);
-  res.cookie("isCorrect", isCorrect, { signed: true });
+  res.cookie("question-" + question.id, isCorrect, { signed: true });
   res.sendStatus(200);
 });
 
