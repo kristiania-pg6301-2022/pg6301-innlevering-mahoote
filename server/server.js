@@ -20,10 +20,13 @@ app.get("/api/question", (req, res) => {
 });
 
 app.get("/api/results", (req, res) => {
+  res.cookie("correctAnswers", correctAnswers, { signed: true });
+  res.cookie("totalAnswers", totalAnswers, { signed: true });
+
   const cookies = req.signedCookies;
   res.json({
-    tot: cookies["totalAnswers"],
-    cor: cookies["correctAnswers"],
+    total: cookies["totalAnswers"],
+    correct: cookies["correctAnswers"],
   });
 });
 
@@ -33,12 +36,10 @@ app.post("/api/question", (req, res) => {
 
   if (isCorrect)
     res.cookie("correctAnswers", correctAnswers++, { signed: true });
+  else res.cookie("correctAnswers", correctAnswers, { signed: true });
+
   res.cookie("totalAnswers", totalAnswers++, { signed: true });
 
-  res.sendStatus(200);
-});
-
-app.get("/api/deleteCookies", (req, res) => {
   res.sendStatus(200);
 });
 

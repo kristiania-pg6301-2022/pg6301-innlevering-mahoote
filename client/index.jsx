@@ -12,7 +12,14 @@ function FrontPage() {
   return (
     <div>
       <h1>Front page</h1>
-      <Link to={"/question"}>Question</Link>
+      <ul>
+        <li>
+          <Link to={"/question"}>New questionnaire</Link>
+        </li>
+        <li>
+          <Link to={"/results"}>Your results</Link>
+        </li>
+      </ul>
     </div>
   );
 }
@@ -35,12 +42,10 @@ function Question() {
       },
       body: JSON.stringify({ question, userAnswer }),
     }).then(async () => {
-      const temp = await fetch("/api/question");
-      setQuestion(await temp.json());
+      const res = await fetch("/api/question");
+      setQuestion(await res.json());
     });
   }
-
-  function handleSubmit() {}
 
   return (
     <div>
@@ -54,6 +59,7 @@ function Question() {
             </button>
           </div>
         ))}
+      <br />
       <button onClick={(q) => navigate("/results")}>
         Submit Questionnaire
       </button>
@@ -62,14 +68,33 @@ function Question() {
 }
 
 function Results() {
+  const navigate = useNavigate();
+
   const [cookies, setCookies] = useState();
 
   useEffect(async () => {
     const res = await fetch("/api/results");
     setCookies(await res.json());
   }, []);
+  if (!cookies) return <div>Loading...</div>;
 
-  return <div>{cookies}</div>;
+  return (
+    <div>
+      <h1>Your results</h1>
+      <p>
+        {cookies.correct} correct answers out of {cookies.total} total
+        questions.
+      </p>
+      <ul>
+        <li>
+          <Link to={"/question"}>New questionnaire</Link>
+        </li>
+        <li>
+          <Link to={"/"}>Home</Link>
+        </li>
+      </ul>
+    </div>
+  );
 }
 
 function Application() {
