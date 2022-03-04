@@ -101,7 +101,14 @@ function Results() {
       </p>
       <ul>
         <li>
-          <Link to={"/question"}>New questionnaire</Link>
+          <Link
+            to={"/question"}
+            onClick={async () => {
+              await fetch("/api/clearCookies", { method: "DELETE" });
+            }}
+          >
+            New questionnaire
+          </Link>
         </li>
         <li>
           <Link to={"/"}>Home</Link>
