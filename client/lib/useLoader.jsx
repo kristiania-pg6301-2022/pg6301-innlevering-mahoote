@@ -4,12 +4,11 @@ export function useLoader(loadFn) {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
-  useEffect(reload, []);
 
-  async function reload() {
-    setError(undefined);
-    setLoading(true);
+  async function load() {
     try {
+      setLoading(true);
+      setError(undefined);
       setData(await loadFn());
     } catch (e) {
       setError(e);
@@ -18,5 +17,9 @@ export function useLoader(loadFn) {
     }
   }
 
-  return { data, loading, error, reload };
+  useEffect(() => {
+    load();
+  }, []);
+
+  return { data, loading, error };
 }

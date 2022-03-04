@@ -5,8 +5,8 @@ export class HttpError extends Error {
   }
 }
 
-export async function fetchJSON(url, options) {
-  const res = await fetch(url, options);
+export async function fetchJSON(url) {
+  const res = await fetch(url);
   if (res.status === 200) {
     return await res.json();
   } else if (res.status === 204) {
@@ -20,10 +20,11 @@ export async function postJSON(path, json) {
   const res = await fetch(path, {
     method: "POST",
     headers: {
-      "content-type": "application/json",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(json),
   });
+
   if (!res.ok) {
     throw new HttpError(res.status, res.statusText);
   }

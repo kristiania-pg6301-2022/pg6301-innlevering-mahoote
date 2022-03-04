@@ -31,8 +31,8 @@ app.get("/api/results", (req, res) => {
 });
 
 app.post("/api/question", (req, res) => {
-  const { question, userAnswer } = req.body;
-  const isCorrect = isCorrectAnswer(question, userAnswer);
+  const { data, userAnswer } = req.body;
+  const isCorrect = isCorrectAnswer(data, userAnswer);
 
   if (isCorrect)
     res.cookie("correctAnswers", correctAnswers++, { signed: true });
@@ -41,6 +41,15 @@ app.post("/api/question", (req, res) => {
   res.cookie("totalAnswers", totalAnswers++, { signed: true });
 
   res.sendStatus(200);
+});
+
+app.delete("/api/clearCookies", (req, res) => {
+  totalAnswers = 0;
+  correctAnswers = 0;
+
+  res.clearCookie("correctAnswers");
+  res.clearCookie("totalAnswers");
+  res.end();
 });
 
 app.use(express.static("../client/dist"));

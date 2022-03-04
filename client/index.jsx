@@ -7,6 +7,8 @@ import {
   Routes,
   useNavigate,
 } from "react-router-dom";
+import { useLoader } from "./lib/useLoader";
+import { fetchJSON, postJSON } from "./lib/http";
 
 function FrontPage() {
   return (
@@ -14,7 +16,14 @@ function FrontPage() {
       <h1>Front page</h1>
       <ul>
         <li>
-          <Link to={"/question"}>New questionnaire</Link>
+          <Link
+            to={"/question"}
+            onClick={async () => {
+              await fetch("/api/clearCookies", { method: "DELETE" });
+            }}
+          >
+            New questionnaire
+          </Link>
         </li>
         <li>
           <Link to={"/results"}>Your results</Link>
@@ -25,26 +34,31 @@ function FrontPage() {
 }
 
 function Question() {
-  const [question, setQuestion] = useState();
   const navigate = useNavigate();
-  useEffect(async () => {
-    const res = await fetch("/api/question");
-    setQuestion(await res.json());
-  }, []);
 
-  if (!question) return <div>Loading...</div>;
+  const [question, setQuestion] = useState();
 
-  function handleNext(question, userAnswer) {
-    fetch("/api/question", {
-      method: "post",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ question, userAnswer }),
-    }).then(async () => {
-      const res = await fetch("/api/question");
-      setQuestion(await res.json());
-    });
+  const { data, loading, error } = useLoader(async () => {
+    return await fetchJSON("/api/question");
+  });
+
+  useEffect(() => {
+    setQuestion(data);
+  }, [data]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{error.toString()}</p>
+      </div>
+    );
+  }
+
+  async function handleNext(data, userAnswer) {
+    await postJSON("/api/question", { data, userAnswer });
+    setQuestion(await fetchJSON("/api/question"));
   }
 
   return (
