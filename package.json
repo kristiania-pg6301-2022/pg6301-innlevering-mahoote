@@ -1,0 +1,40 @@
+{
+  "name": "pg6301-innlevering-mahoote",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently npm:dev:client npm:dev:server",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install",
+    "pre-commit": "npm run prettier:check",
+    "prettier:check": "prettier --check **/*.{js,jsx,ts,tsx}",
+    "prettier:format": "prettier --write **/*.{jsx,js,tsx,ts}",
+    "build": "npm run build:server && npm run build:client",
+    "build:client": "cd client && npm run build",
+    "build:server": "cd server && npm run build",
+    "start": "cd server && npm start",
+    "clean": "npm run clean:client",
+    "clean:client": "cd client && rimraf dist .parcel-cache"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kristiania-pg6301-2022/pg6301-innlevering-mahoote.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kristiania-pg6301-2022/pg6301-innlevering-mahoote/issues"
+  },
+  "homepage": "https://github.com/kristiania-pg6301-2022/pg6301-innlevering-mahoote#readme",
+  "devDependencies": {
+    "concurrently": "^7.0.0",
+    "husky": "^7.0.4",
+    "prettier": "^2.5.1"
+  },
+  "dependencies": {
+    "rimraf": "^3.0.2"
+  }
+}
